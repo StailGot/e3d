@@ -3,11 +3,11 @@
 
 #include <GL/glew.h>
 #include "windows_aux.hpp"
-
+#include <GL/wglew.h>
 
 namespace e3d::windows::detail {
 
-  HWND create_window(const std::wstring & title, WNDPROC window_procedure)
+  HWND create_window(const std::wstring & title, uint32_t w, uint32_t h, WNDPROC window_procedure)
   {
     HWND window{};
 
@@ -19,7 +19,7 @@ namespace e3d::windows::detail {
     ::RegisterClass(&wc);
 
     window = ::CreateWindowEx({}, wc.lpszClassName, std::data(title)
-      ,  WS_OVERLAPPEDWINDOW , CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, {}, {}, {}, {});
+      , WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, w, h, {}, {}, {}, {});
     return window;
   }
 
@@ -39,12 +39,68 @@ namespace e3d::windows::detail {
     return result;
   }
 
+  HGLRC init_gl_ext(HDC dc, HGLRC gl_context)
+  {
+    const int pixel_format_attrib_list[] =
+    {
+      WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+      WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+      WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+      WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+      WGL_COLOR_BITS_ARB, 32,
+      WGL_DEPTH_BITS_ARB, 24,
+      WGL_STENCIL_BITS_ARB, 8,
+      WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
+      WGL_SAMPLES_ARB, 16,
+      0
+    };
+
+    int context_attribs[] =
+    {
+      WGL_CONTEXT_MAJOR_VERSION_ARB, consts::major_version,
+      WGL_CONTEXT_MINOR_VERSION_ARB, consts::minor_version,
+      WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+      0
+    };
+
+    HGLRC gl_context_ext{};
+    PIXELFORMATDESCRIPTOR pfd{};
+
+    INT pixel_format{};
+    UINT num_formats{};
+    if (::wglChoosePixelFormatARB(dc, pixel_format_attrib_list, nullptr, 1, &pixel_format, &num_formats))
+      if (::DescribePixelFormat(dc, pixel_format, sizeof pfd, &pfd))
+        if (::SetPixelFormat(dc, pixel_format, &pfd))
+        {
+          gl_context_ext = ::wglCreateContextAttribsARB(dc, gl_context, context_attribs);
+          ::wglMakeCurrent(dc, gl_context_ext);
+        }
+
+    return gl_context_ext;
+  }
+
+  HGLRC init_gl_base(HDC dc)
+  {
+    set_pixel_format(dc);
+    HGLRC gl_context = ::wglCreateContext(dc);
+    return gl_context;
+  }
+
   bool init_gl(HDC dc)
   {
     bool result = false;
-    set_pixel_format(dc);
-    HGLRC gl_context = wglCreateContext(dc);
-    result = wglMakeCurrent(dc, gl_context) && !glewInit();
+
+    HWND window = HWND(e3d::windows::create_window(L"null", 1, 1));
+    {
+      dc_holder tmp_dc{ window };
+
+      HGLRC gl_context = init_gl_base(static_cast<HDC>(tmp_dc));
+      result = ::wglMakeCurrent(static_cast<HDC>(tmp_dc), gl_context) && !glewInit();
+      HGLRC gl_context_ext = init_gl_ext(dc, gl_context);
+
+      ::wglDeleteContext(gl_context);
+    }
+    ::DestroyWindow(window);
     return result;
   }
 
@@ -62,9 +118,9 @@ namespace e3d::windows::detail {
 
   LRESULT WINAPI window_procedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
   {
-    for (auto && callback : get_message_map().equal_range( message_map_key_t{ window, message }))
+    for (auto && callback : get_message_map().equal_range(message_map_key_t{ window, message_t(message) }))
       if (callback.second)
-        callback.second(window, message, wparam, int32_t(lparam));
+        callback.second(window, message_t(message), wparam_t(wparam), lparam_t(lparam));
     return ::DefWindowProc(window, message, wparam, lparam);
   };
 
@@ -73,26 +129,36 @@ namespace e3d::windows::detail {
 
 namespace e3d::windows {
 
-  HANDLE windows::create_window(const std::wstring& title)
+  HANDLE create_window(const std::wstring& title, uint32_t w, uint32_t h)
   {
-    return detail::create_window(title, detail::window_procedure);
+    return detail::create_window(title, w, h, detail::window_procedure);
   }
 
-  void windows::message_loop()
+  void message_loop()
   {
     return detail::message_loop();
   }
 
-  bool windows::init_gl(HANDLE window)
+  bool init_gl(HANDLE window)
   {
     detail::dc_holder dc{ ::HWND(window) };
     return detail::init_gl(static_cast<HDC>(dc));
   }
 
-  message_map_t& get_message_map()
+  message_map_t & get_message_map()
   {
-    static std::multimap<message_map_key_t, message_callback_t> message_map;
+    static message_map_t message_map;
     return message_map;
+  }
+
+  event_t register_event(window_t window, message_t message, message_callback_t callback)
+  {
+    return get_message_map().insert({ { window, message }, callback });
+  }
+
+  void remove_event(event_t event)
+  {
+    get_message_map().erase(event);
   }
 
 } // namespace e3d::windows

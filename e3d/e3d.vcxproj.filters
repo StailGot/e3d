@@ -19,6 +19,9 @@
     <Filter Include="base\detail">
       <UniqueIdentifier>{06c540a8-73e8-4d9e-b3f0-61eca7a1a020}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gl">
+      <UniqueIdentifier>{34990da5-51d3-4218-980b-feb29766f7a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -26,6 +29,9 @@
     </ClCompile>
     <ClCompile Include="window.cpp">
       <Filter>base</Filter>
+    </ClCompile>
+    <ClCompile Include="gl_aux.cpp">
+      <Filter>gl</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="windows_aux.hpp">
       <Filter>base\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_aux.hpp">
+      <Filter>gl</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

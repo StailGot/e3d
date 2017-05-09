@@ -54,7 +54,9 @@ int main(int argc, char * argv[])
     ::glClearBufferfv(GL_DEPTH, 0, one);
 
     ::glUseProgram(program);
-    ::glUniform2fv(::glGetUniformLocation(program, "viewport"), 1, glm::value_ptr(viewport));
+    
+    GLint location = ::glGetUniformLocation(program, "viewport");
+    ::glUniform2fv(location, 1, glm::value_ptr(viewport));
 
     ::glBegin(GL_POINTS);
     ::glVertex2f(0, 0);

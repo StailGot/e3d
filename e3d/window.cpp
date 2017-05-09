@@ -92,13 +92,14 @@ namespace e3d::windows::detail {
 
     HWND window = HWND(e3d::windows::create_window(L"null", 1, 1));
     {
-      dc_holder tmp_dc{ window };
+      //dc_holder tmp_dc{ window };
+      auto tmp_dc = dc;
 
       HGLRC gl_context = init_gl_base(static_cast<HDC>(tmp_dc));
       result = ::wglMakeCurrent(static_cast<HDC>(tmp_dc), gl_context) && !glewInit();
       HGLRC gl_context_ext = init_gl_ext(dc, gl_context);
 
-      ::wglDeleteContext(gl_context);
+      //::wglDeleteContext(gl_context);
     }
     ::DestroyWindow(window);
     return result;

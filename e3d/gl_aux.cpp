@@ -56,7 +56,7 @@ namespace gl
         if (GLint length = detail::get_iv(shader, GL_INFO_LOG_LENGTH, ::glGetShaderiv))
         {
           std::vector<GLchar> info_log(length);
-          ::glGetShaderInfoLog(shader, (GLsizei)std::size(info_log), &length, std::data(info_log));
+          ::glGetShaderInfoLog(shader, static_cast<GLsizei>(std::size(info_log)), &length, std::data(info_log));
           *os << std::data(info_log) << "\n";
         }
       ::glDeleteShader(shader);
@@ -81,7 +81,7 @@ namespace gl
         if (GLint length = detail::get_iv(program, GL_INFO_LOG_LENGTH, ::glGetProgramiv))
         {
           std::vector<GLchar> info_log(length);
-          ::glGetProgramInfoLog(program, (GLsizei)std::size(info_log), &length, std::data(info_log));
+          ::glGetProgramInfoLog(program, static_cast<GLsizei>(std::size(info_log)), &length, std::data(info_log));
           *os << std::data(info_log) << "\n";
         }
       ::glDeleteProgram(program);
@@ -129,12 +129,12 @@ namespace gl
     namespace rn = boost::adaptors;
 
     auto shaders = files
-      | rn::transformed([](auto && f) { return f.path();                                                                    })
-      | rn::filtered([](auto && f) { return f.extension() == ".glsl";                                                    })
+      | rn::transformed([](auto && f) { return f.path();                                                                })
+      | rn::filtered([](auto && f) { return f.extension() == ".glsl";                                                   })
       | rn::transformed([](auto && f) { return std::make_pair(f, detail::get_shader_type(f.stem().string()));           })
-      | rn::filtered([](auto && f) { return !!f.second;                                                                  })
+      | rn::filtered([](auto && f) { return !!f.second;                                                                 })
       | rn::transformed([](auto && f) { return std::make_pair(detail::read_file_to_string(f.first.string()), f.second); })
-      | rn::transformed([](auto && f) { return create_shader(f.first, f.second.get(), &std::clog);                        })
+      | rn::transformed([](auto && f) { return create_shader(f.first, f.second.get(), &std::clog);                      })
       ;
     return { std::begin(shaders), std::end(shaders) };
   }

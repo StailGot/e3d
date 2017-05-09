@@ -10,19 +10,16 @@
 
 namespace sys
 {
-
   folder_monitor::folder_monitor( const std::wstring & folder, callback_t callback )
   {
     set_folder( folder );
     set_callback( std::move( callback ) );
   }
 
-
   folder_monitor::~folder_monitor()
   {
     stop();
   }
-
 
   void folder_monitor::start()
   {
@@ -37,25 +34,21 @@ namespace sys
     } ).detach();
   }
 
-
   void folder_monitor::start( const std::wstring & folder )
   {
     set_folder( folder );
     start();
   }
 
-
   void folder_monitor::set_callback( callback_t callback )
   {
     _callback = std::move( callback );
   }
 
-
   void folder_monitor::set_folder( const std::wstring & folder )
   {
     _folder = folder;
   }
-
 
   void folder_monitor::stop()
   {
@@ -67,10 +60,8 @@ namespace sys
         ::CloseHandle( handle );
   }
 
-
   void folder_monitor::do_work()
   {
-
     bool stop = false;
     using namespace std::chrono;
 
@@ -113,7 +104,6 @@ namespace sys
     }
   }
 
-
   void folder_monitor::notify( double elapsed )
   {
     //std::cout << "event" << "\n";
@@ -121,8 +111,8 @@ namespace sys
 
     uint8_t buffer [2048] = {};
     DWORD n_bytes = 0;
-    ::ReadDirectoryChangesW( _events_handles [change_event], buffer, (DWORD)std::size( buffer ), FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE, &n_bytes, nullptr, nullptr );
-    FILE_NOTIFY_INFORMATION & info = *(FILE_NOTIFY_INFORMATION*)&buffer;
+    ::ReadDirectoryChangesW( _events_handles [change_event], buffer, static_cast<DWORD>(std::size(buffer)), FALSE, FILE_NOTIFY_CHANGE_LAST_WRITE, &n_bytes, nullptr, nullptr );
+    FILE_NOTIFY_INFORMATION & info = *reinterpret_cast<FILE_NOTIFY_INFORMATION*>(&buffer);
 
     if (_callback)
       (_callback)(info.FileName);

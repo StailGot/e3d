@@ -1,0 +1,2 @@
+phong_fs TEXT "phong_fs.glsl"
+phong_vs TEXT "phong_vs.glsl"

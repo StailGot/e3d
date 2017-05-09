@@ -13,10 +13,10 @@ namespace e3d::windows::detail {
 
   class dc_holder : nocopyable
   {
-    HDC _dc{};
-    HWND _window;
+    ::HDC _dc{};
+    ::HWND _window;
   public:
-    dc_holder(HWND window)
+    dc_holder(::HWND window)
       :_dc(::GetDC(window))
       , _window(window)
     {

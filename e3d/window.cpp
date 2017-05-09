@@ -32,7 +32,7 @@ namespace e3d::windows::detail {
     pfd.cColorBits = 32;
     pfd.nVersion = 1;
 
-    if (auto pixelFormat = ChoosePixelFormat(dc, &pfd))
+    if (auto pixelFormat = ::ChoosePixelFormat(dc, &pfd))
       if (SetPixelFormat(dc, pixelFormat, &pfd))
         result = true;
 
@@ -62,9 +62,9 @@ namespace e3d::windows::detail {
 
   LRESULT WINAPI window_procedure(HWND window, UINT message, WPARAM wparam, LPARAM lparam)
   {
-    for (auto && callback : get_message_map().equal_range( message_map_key_t{ window,message }))
+    for (auto && callback : get_message_map().equal_range( message_map_key_t{ window, message }))
       if (callback.second)
-        callback.second(window, message, wparam, lparam);
+        callback.second(window, message, wparam, int32_t(lparam));
     return ::DefWindowProc(window, message, wparam, lparam);
   };
 
@@ -73,7 +73,7 @@ namespace e3d::windows::detail {
 
 namespace e3d::windows {
 
-  HWND windows::create_window(const std::wstring& title)
+  HANDLE windows::create_window(const std::wstring& title)
   {
     return detail::create_window(title, detail::window_procedure);
   }
@@ -83,9 +83,9 @@ namespace e3d::windows {
     return detail::message_loop();
   }
 
-  bool windows::init_gl(HWND window)
+  bool windows::init_gl(HANDLE window)
   {
-    detail::dc_holder dc{ window };
+    detail::dc_holder dc{ ::HWND(window) };
     return detail::init_gl(static_cast<HDC>(dc));
   }
 

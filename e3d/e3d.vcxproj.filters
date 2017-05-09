@@ -22,6 +22,9 @@
     <Filter Include="gl">
       <UniqueIdentifier>{34990da5-51d3-4218-980b-feb29766f7a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{31f0be2b-8080-4a4e-a024-130550cc70a5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,6 +35,9 @@
     </ClCompile>
     <ClCompile Include="gl_aux.cpp">
       <Filter>gl</Filter>
+    </ClCompile>
+    <ClCompile Include="system\folder_monitor.cpp">
+      <Filter>system</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -46,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="gl_aux.hpp">
       <Filter>gl</Filter>
+    </ClInclude>
+    <ClInclude Include="system\folder_monitor.hpp">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -56,6 +56,7 @@
   <ItemGroup>
     <ClCompile Include="gl_aux.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="system\folder_monitor.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gl_aux.hpp" />
+    <ClInclude Include="system\folder_monitor.hpp" />
     <ClInclude Include="window.hpp" />
     <ClInclude Include="windows_aux.hpp" />
   </ItemGroup>

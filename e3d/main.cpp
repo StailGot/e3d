@@ -17,6 +17,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "window.hpp"
+#include "gl_aux.hpp"
 
 
 auto init =
@@ -28,7 +29,9 @@ auto init =
 
 int main(int argc, char * argv[])
 {
-  HWND window = HWND(e3d::windows::create_window(L"Amazing window name", 800, 600));
+  int w = 800;
+  int h = 600;
+  HWND window = HWND(e3d::windows::create_window(L"Amazing window name", w, h));
   HDC dc = ::GetDC(window);
   e3d::windows::init_gl(window);
   ::ShowWindow(window, SW_SHOW);
@@ -37,30 +40,36 @@ int main(int argc, char * argv[])
 
   auto repain_event = [window] { ::SendMessage(window, WM_PAINT, {}, {}); };
 
-  init();
 
+  std::string shaders_path = R"(C:\dev\emptiness\out\Release\x64\exe\shaders)";
+  
+  GLuint program = gl::create_program(gl::load_shaders(shaders_path), &std::clog);
+  glm::vec2 viewport{ w, h };
+  
   auto e = e3d::windows::register_event(window, e3d::windows::message_t(WM_PAINT), [&, dc](auto...args) {
     GLfloat color[] = { 0.85f, 0.85f, 0.85f, 0.f };
     ::glClearBufferfv(GL_COLOR, 0, color);
 
-    GLfloat one[] = { 1.f, 1.f, 1.f, 1.f };
+    GLfloat one[] = { 1.f };
     ::glClearBufferfv(GL_DEPTH, 0, one);
 
-    //::glUseProgram(program);
+    ::glUseProgram(program);
+    ::glUniform2fv(::glGetUniformLocation(program, "viewport"), 1, glm::value_ptr(viewport));
+
     ::glBegin(GL_POINTS);
     ::glVertex2f(0, 0);
     ::glEnd();
-    glUseProgram(0);
 
     ::SwapBuffers(dc);
   });
 
   e3d::windows::register_event(window, e3d::windows::message_t(WM_SIZE), [&, dc](auto...args) {
     auto size = std::get<e3d::windows::lparam_t>(std::make_tuple(args...));
-    ::glViewport(0, 0, LOWORD(size), HIWORD(size));
+    viewport = { LOWORD(size), HIWORD(size) };
+    ::glViewport(0, 0, static_cast<GLsizei>(viewport.x), static_cast<GLsizei>(viewport.y));
     std::cout
-      << LOWORD(size) << " "
-      << HIWORD(size) << std::endl;
+      << viewport.x << " "
+      << viewport.y << std::endl;
   });
 
   std::thread repaint{ [&repain_event] {
@@ -70,6 +79,8 @@ int main(int argc, char * argv[])
       repain_event();
     }
   } };
+
+  init();
 
   e3d::windows::message_loop();
   return 0;

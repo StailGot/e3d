@@ -13,13 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="base">
+      <UniqueIdentifier>{9dc7dcb8-760b-4fe7-9ea5-2f257ab715d0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="base\detail">
+      <UniqueIdentifier>{06c540a8-73e8-4d9e-b3f0-61eca7a1a020}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="window.cpp">
+      <Filter>base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="window.hpp">
+      <Filter>base</Filter>
+    </ClInclude>
+    <ClInclude Include="windows_aux.hpp">
+      <Filter>base\detail</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

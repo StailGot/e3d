@@ -13,7 +13,8 @@ namespace e3d::windows::detail {
 
     WNDCLASS wc{};
     wc.lpfnWndProc = window_procedure;
-    wc.lpszClassName = L"OpenGl 4.5 Window class";
+    wc.lpszClassName = std::data(title);
+    //wc.lpszClassName = L"OpenGl 4.5 Window class";
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_NOCLOSE;
 
     ::RegisterClass(&wc);
@@ -43,15 +44,18 @@ namespace e3d::windows::detail {
   {
     const int pixel_format_attrib_list[] =
     {
-      WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
-      WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
-      WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
-      WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
-      WGL_COLOR_BITS_ARB, 32,
       WGL_DEPTH_BITS_ARB, 24,
       WGL_STENCIL_BITS_ARB, 8,
-      WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
-      WGL_SAMPLES_ARB, 16,
+      WGL_DRAW_TO_WINDOW_ARB, GL_TRUE,
+      WGL_SUPPORT_OPENGL_ARB, GL_TRUE,
+      WGL_DOUBLE_BUFFER_ARB, GL_TRUE,
+      WGL_PIXEL_TYPE_ARB, WGL_TYPE_RGBA_ARB,
+      WGL_COLOR_BITS_ARB, 24,
+      WGL_ALPHA_BITS_ARB, 8,
+      WGL_ACCELERATION_ARB, WGL_FULL_ACCELERATION_ARB,
+      
+      //WGL_SAMPLE_BUFFERS_ARB, GL_TRUE,
+      //WGL_SAMPLES_ARB, 16,
       0
     };
 
@@ -59,7 +63,8 @@ namespace e3d::windows::detail {
     {
       WGL_CONTEXT_MAJOR_VERSION_ARB, consts::major_version,
       WGL_CONTEXT_MINOR_VERSION_ARB, consts::minor_version,
-      WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB,
+      WGL_CONTEXT_PROFILE_MASK_ARB, /*WGL_CONTEXT_CORE_PROFILE_BIT_ARB*/ WGL_CONTEXT_COMPATIBILITY_PROFILE_BIT_ARB,
+      //WGL_CONTEXT_FLAGS_ARB, WGL_CONTEXT_DEBUG_BIT_ARB,
       0
     };
 
@@ -68,12 +73,12 @@ namespace e3d::windows::detail {
 
     INT pixel_format{};
     UINT num_formats{};
+    
     if (::wglChoosePixelFormatARB(dc, pixel_format_attrib_list, nullptr, 1, &pixel_format, &num_formats))
       if (::DescribePixelFormat(dc, pixel_format, sizeof pfd, &pfd))
         if (::SetPixelFormat(dc, pixel_format, &pfd))
         {
           gl_context_ext = ::wglCreateContextAttribsARB(dc, gl_context, context_attribs);
-          ::wglMakeCurrent(dc, gl_context_ext);
         }
 
     return gl_context_ext;
@@ -92,14 +97,15 @@ namespace e3d::windows::detail {
 
     HWND window = HWND(e3d::windows::create_window(L"null", 1, 1));
     {
-      //dc_holder tmp_dc{ window };
-      auto tmp_dc = dc;
+      dc_holder tmp_dc{ window };
+      //auto tmp_dc = dc;
 
       HGLRC gl_context = init_gl_base(static_cast<HDC>(tmp_dc));
-      result = ::wglMakeCurrent(static_cast<HDC>(tmp_dc), gl_context) && !glewInit();
+      result = ::wglMakeCurrent(static_cast<HDC>(tmp_dc), gl_context) && ::glewInit() == GLEW_OK;
       HGLRC gl_context_ext = init_gl_ext(dc, gl_context);
+      ::wglMakeCurrent(dc, gl_context_ext);
 
-      //::wglDeleteContext(gl_context);
+      ::wglDeleteContext(gl_context);
     }
     ::DestroyWindow(window);
     return result;

@@ -19,7 +19,6 @@
 #include "window.hpp"
 #include "gl_aux.hpp"
 
-
 auto init =
 []
 {

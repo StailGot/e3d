@@ -1,0 +1,15 @@
+﻿AlignAfterOpenBracket: 'true'
+AlignConsecutiveAssignments: 'true'
+AlignConsecutiveDeclarations: 'true'
+AlignTrailingComments: 'true'
+AllowAllParametersOfDeclarationOnNextLine: 'true'
+AllowShortBlocksOnASingleLine: 'true'
+BreakBeforeBraces: Allman
+BreakBeforeTernaryOperators: 'true'
+BreakConstructorInitializersBeforeComma: 'true'
+ColumnLimit: '80'
+IndentCaseLabels: 'true'
+SpacesInParentheses: 'true'
+Standard: Auto
+TabWidth: '2'
+UseTab: Never

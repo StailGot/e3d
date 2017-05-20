@@ -1,60 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="system">
+      <UniqueIdentifier>{4ef527d5-cf44-408d-b9eb-91f60ef9785f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    <Filter Include="window">
+      <UniqueIdentifier>{6bdd2176-c589-49b2-bed6-abd5a56a1005}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="base">
-      <UniqueIdentifier>{9dc7dcb8-760b-4fe7-9ea5-2f257ab715d0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="base\detail">
-      <UniqueIdentifier>{06c540a8-73e8-4d9e-b3f0-61eca7a1a020}</UniqueIdentifier>
+    <Filter Include="gl\detail">
+      <UniqueIdentifier>{2339552c-a9eb-4a65-88a2-98a12f9560fe}</UniqueIdentifier>
     </Filter>
     <Filter Include="gl">
-      <UniqueIdentifier>{34990da5-51d3-4218-980b-feb29766f7a6}</UniqueIdentifier>
+      <UniqueIdentifier>{cdbe85ec-8fb4-498a-bcb7-2e5f8656ec3f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="system">
-      <UniqueIdentifier>{31f0be2b-8080-4a4e-a024-130550cc70a5}</UniqueIdentifier>
+    <Filter Include="window\detail">
+      <UniqueIdentifier>{cc45e5bb-b261-425d-b3c6-c13819105a01}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="window.cpp">
-      <Filter>base</Filter>
-    </ClCompile>
-    <ClCompile Include="gl_aux.cpp">
-      <Filter>gl</Filter>
-    </ClCompile>
     <ClCompile Include="system\folder_monitor.cpp">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="window\window.cpp">
+      <Filter>window</Filter>
+    </ClCompile>
+    <ClCompile Include="gl\detail\gl_aux.cpp">
+      <Filter>gl\detail</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="window.hpp">
-      <Filter>base</Filter>
-    </ClInclude>
-    <ClInclude Include="windows_aux.hpp">
-      <Filter>base\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="gl_aux.hpp">
-      <Filter>gl</Filter>
-    </ClInclude>
     <ClInclude Include="system\folder_monitor.hpp">
       <Filter>system</Filter>
     </ClInclude>
+    <ClInclude Include="window\window.hpp">
+      <Filter>window</Filter>
+    </ClInclude>
+    <ClInclude Include="window\detail\windows_aux.hpp">
+      <Filter>window\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\detail\gl_aux.hpp">
+      <Filter>gl\detail</Filter>
+    </ClInclude>
   </ItemGroup>
+  <ItemGroup />
 </Project>

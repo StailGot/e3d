@@ -1,13 +1,9 @@
 #pragma once
 
-//#include <Windows.h>
-
 #include <string>
 #include <chrono>
 #include <functional>
 #include <map>
-
-//#include <minwindef.h>
 
 #include <glm/gtc/type_ptr.hpp>
 

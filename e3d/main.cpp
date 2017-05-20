@@ -13,8 +13,8 @@
 #include <map>
 #include <array>
 
-#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
 
 #include "window.hpp"
 #include "gl_aux.hpp"
@@ -26,10 +26,11 @@ auto init =
   ::glEnable(GL_PROGRAM_POINT_SIZE);
 };
 
-int main(int argc, char * argv[])
+int main( int argc, char *argv[] )
 {
-  int w = 800;
-  int h = 600;
+  const int w = 800;
+  const int h = 600;
+
   HWND window = HWND(e3d::windows::create_window(L"Amazing window name", w, h));
   HDC dc = ::GetDC(window);
   e3d::windows::init_gl(window);

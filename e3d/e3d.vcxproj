@@ -54,19 +54,19 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ItemGroup>
-    <ClCompile Include="gl_aux.cpp" />
+    <ClCompile Include="gl\detail\gl_aux.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="system\folder_monitor.cpp" />
-    <ClCompile Include="window.cpp" />
+    <ClCompile Include="window\window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="gl_aux.hpp" />
+    <ClInclude Include="gl\detail\gl_aux.hpp" />
     <ClInclude Include="system\folder_monitor.hpp" />
-    <ClInclude Include="window.hpp" />
-    <ClInclude Include="windows_aux.hpp" />
+    <ClInclude Include="window\detail\windows_aux.hpp" />
+    <ClInclude Include="window\window.hpp" />
   </ItemGroup>
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -109,6 +109,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>gl\detail;window;window\detail;detail;$(StlIncludeDirectories);..\e3d;system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -122,6 +123,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>gl\detail;window;window\detail;detail;$(StlIncludeDirectories);..\e3d;system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +139,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>gl\detail;window;window\detail;detail;$(StlIncludeDirectories);..\e3d;system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +157,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpplatest</LanguageStandard>
+      <AdditionalIncludeDirectories>gl\detail;window;window\detail;detail;$(StlIncludeDirectories);..\e3d;system;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
